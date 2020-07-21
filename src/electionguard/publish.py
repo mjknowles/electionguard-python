@@ -52,12 +52,16 @@ def publish(
     make_directory(BALLOTS_DIR)
     for ballot in ciphertext_ballots:
         ballot_name = BALLOT_PREFIX + ballot.object_id
-        ballot.to_json_file(ballot_name, BALLOTS_DIR)
+        ballot_dir = os.path.join(BALLOTS_DIR, ballot.object_id[0:4])
+        make_directory(ballot_dir)
+        ballot.to_json_file(ballot_name, ballot_dir)
 
     make_directory(SPOILED_DIR)
     for ballot in ciphertext_tally.spoiled_ballots.values():
         ballot_name = BALLOT_PREFIX + ballot.object_id
-        ballot.to_json_file(ballot_name, SPOILED_DIR)
+        spoiled_dir = os.path.join(SPOILED_DIR, ballot.object_id[0:4])
+        make_directory(spoiled_dir)
+        ballot.to_json_file(ballot_name, spoiled_dir)
 
     ciphertext_tally.to_json_file(ENCRYPTED_TALLY_FILE_NAME, results_directory)
     plaintext_tally.to_json_file(TALLY_FILE_NAME, results_directory)
